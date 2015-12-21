@@ -1,0 +1,172 @@
+<html lang="en">
+
+<head>
+
+<meta charset="utf-8">
+   		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<!-- Enable Mobile view with viewport meta tag -->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!-- Title for the page -->
+		<title>StoryTree Add New Stories</title>
+
+		<!-- Bootstrap Framework Dependencies -->
+		
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+		<!-- Latest compiled JavaScript -->
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+			 <script type="text/javascript">
+        $(document).ready(function() {
+        
+            $("#logout").click(function() {
+            localStorage.removeItem("email");
+            window.location.href = "login";
+        });
+
+          $("#createButton").click(function() {
+        $.ajax({
+          // The URL for the request -- note the simple REST API!
+          // all URLs are relative to http://localhost:3000/
+          url: "users/",
+          type: "POST",
+          dataType : "text", // this URL returns a plain text string, not JSON
+          data : { story: $("#inputStory").val(),
+                   summary: $("#inputSummary").val(),
+                   title: $("#inputTitle").val()
+                 },
+          success: function( data ) {
+            localStorage.setItem("email",storeEmail.value);
+            console.log("You received some data!", data);
+            if (data == 'OK') {
+              window.location.href = "frontpage";
+            } else {
+              $("#status").html("Error: could not create a new user!");
+            }
+          },
+        });
+      });
+
+          $("#createButton").click(function() {
+              $.ajax({
+                  url: "addStory/",
+                  type: "POST",
+                  dataType : "text", 
+                  data : { email: localStorage.getItem("email"),
+                           parent: "",
+                           content: document.getElementById('inputStory').value,
+                           title: document.getElementById('inputTitle').value,
+                           chapter: document.getElementById('inputChapter').value
+                         },
+                  success: function( data ) {
+                    if (data == 'OK') {
+                      localStorage.setItem('title', document.getElementById('inputTitle').value);
+                      localStorage.setItem('chapter', document.getElementById('inputChapter').value);
+                      localStorage.setItem('author', localStorage.getItem("email"));
+    
+                      window.location.href = "read";
+                    }
+                    else if (data == 'NULL_CONTENT') {
+                       $('#statusDiv').html("Please Complete All Fields");
+                    }
+                    else {
+                      $('#statusDiv').html("Story With This Title Already Exists");
+                    }
+                  },
+              });
+            });
+
+
+          $("#homeLink").click(function() {
+              window.location.href = "frontpage";
+          });
+
+          $("#viewProfile").click(function() {
+            window.location.href = "profile";
+          });
+
+          $("#updatePage").click(function() {
+            window.location.href = "update";
+          });
+    });
+
+
+      </script>
+
+</head>
+
+<body background="trees.jpg">
+
+    <div class="container" style="background-color:white;">
+
+    
+
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+           
+            <li role="presentation" id="homeLink"><a href="#">Home</a></li>
+
+            
+            <li role="presentation" class="dropdown">
+       
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+          <span class="glyphicon glyphicon-menu-hamburger"></span>
+        </a>
+        
+        <ul class="dropdown-menu dropdown-menu-right">
+          <li id="newStoryPage"><a href="#">Add New Story</a></li>
+          <li id="viewProfile"><a href="#">View Profile</a></li>
+          <li id="updatePage"><a href="#">Update Profile</a></li>
+          <li id="logout"><a href="#">Log Out</a></li>
+        </ul>
+      </li>
+
+      <li role="presentation" id="profilePage">
+              <a href="#">
+              <img border="0" id="profilePicture" src="girls.jpg" width="20" height="20" class="img-circle">
+              </a>
+            </li>
+
+          </ul>
+        </nav>
+        <h3 class="text-muted">Add New Story</h3>
+
+      </div>
+
+      <div id="inputNewStory">
+        
+        <label for="inputTitle">What is your Story's title?</label>
+        <input type="text" class="form-control" id="inputTitle" placeholder="Title">
+
+        <label for="inputChapter" >What is your Chapter Name?</label>
+        <textarea class="form-control" id="inputChapter" placeholder="ex. Introduction"></textarea>
+
+       
+        <label for="inputStory" >Write your Story below:</label>
+        <textarea class="form-control" rows="12" id="inputStory"></textarea>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit" id="createButton">Post</button>
+
+        <div id="statusDiv" style="color:red;"</div>
+
+      </div>
+
+      <footer class="footer">
+        <p>&copy; 2015 Company, Inc.</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+</body>
+</html>
+	
+	
